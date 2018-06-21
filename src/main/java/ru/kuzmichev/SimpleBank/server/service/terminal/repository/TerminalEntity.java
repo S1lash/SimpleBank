@@ -1,15 +1,19 @@
 package ru.kuzmichev.SimpleBank.server.service.terminal.repository;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ru.kuzmichev.SimpleBank.server.service.account.repository.AccountEntity;
 import ru.kuzmichev.SimpleBank.server.util.TerminalType;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@Getter
+@Data
 @Entity
 @Table(name = "TERMINAL")
+@EqualsAndHashCode(of = {"id", "address"})
+@ToString
 public class TerminalEntity {
 
     @Id
@@ -17,7 +21,7 @@ public class TerminalEntity {
     private long id;
 
     @Column(nullable = true)
-    private String adress;
+    private String address;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

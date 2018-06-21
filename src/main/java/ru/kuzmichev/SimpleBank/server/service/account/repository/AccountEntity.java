@@ -1,6 +1,8 @@
 package ru.kuzmichev.SimpleBank.server.service.account.repository;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.repository.AccountOwnerEntity;
 import ru.kuzmichev.SimpleBank.server.service.terminal.repository.TerminalEntity;
 import ru.kuzmichev.SimpleBank.server.service.transaction.repository.TransactionEntity;
@@ -9,9 +11,11 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
-@Getter
+@Data
 @Entity
 @Table(name = "ACCOUNT")
+@EqualsAndHashCode(of = {"id", "number"})
+@ToString(exclude = {"debitAccounts", "creditAccounts", "terminals"})
 public class AccountEntity {
 
     @Id

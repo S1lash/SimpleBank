@@ -1,6 +1,8 @@
 package ru.kuzmichev.SimpleBank.server.service.transaction.repository;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ru.kuzmichev.SimpleBank.server.service.account.repository.AccountEntity;
 import ru.kuzmichev.SimpleBank.server.util.TransactionState;
 import ru.kuzmichev.SimpleBank.server.util.TransactionType;
@@ -8,9 +10,11 @@ import ru.kuzmichev.SimpleBank.server.util.TransactionType;
 import javax.persistence.*;
 import java.util.Date;
 
-@Getter
+@Data
 @Entity
 @Table(name = "TRANSACTION")
+@EqualsAndHashCode(of = {"id", "state", "type"})
+@ToString
 public class TransactionEntity {
 
     @Id
