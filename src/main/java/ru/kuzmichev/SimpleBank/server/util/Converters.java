@@ -7,6 +7,8 @@ import ru.kuzmichev.SimpleBank.server.service.accountowner.AccountOwner;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.repository.AccountOwnerEntity;
 import ru.kuzmichev.SimpleBank.server.service.terminal.Terminal;
 import ru.kuzmichev.SimpleBank.server.service.terminal.repository.TerminalEntity;
+import ru.kuzmichev.SimpleBank.server.service.transaction.Transaction;
+import ru.kuzmichev.SimpleBank.server.service.transaction.repository.TransactionEntity;
 
 import java.util.stream.Collectors;
 
@@ -35,7 +37,7 @@ public class Converters {
                 .setId(entity.getId())
                 .setFullName(entity.getFullName())
                 .setAccounts(entity.getAccounts().stream()
-                    .map(a -> a.getId())
+                    .map(a -> convert(a))
                     .collect(Collectors.toSet()))
                 .setCreatedDate(entity.getCreatedDate())
                 .setEnable(entity.isEnable())
@@ -56,15 +58,30 @@ public class Converters {
                 .setOwner(convert(entity.getOwner()))
                 .setPan(entity.getPan())
                 .setTerminals(entity.getTerminals().stream()
-                    .map(t -> t.getId())
+                    .map(t -> convert(t))
                     .collect(Collectors.toSet()))
                 .setDebitTransactions(entity.getDebitTransactions().stream()
-                        .map(t -> t.getId())
-                        .collect(Collectors.toSet()))
+                    .map(t -> convert(t))
+                    .collect(Collectors.toSet()))
                 .setCreditTransactions(entity.getCreditTransactions().stream()
-                        .map(t -> t.getId())
-                        .collect(Collectors.toSet()));
+                    .map(t -> convert(t))
+                    .collect(Collectors.toSet()));
 
+    }
+
+    @Nullable
+    public static Transaction convert(TransactionEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        return new Transaction()
+                .setId(entity.getId())
+                .setAmount(entity.getAmount())
+                .setCreatedDate(entity.getCreatedDate())
+                .setDebitAccount(convert(entity.getDebitAccount()))
+                .setCreditAccount(convert(entity.getCreditAccount()))
+                .setState(entity.getState())
+                .setType(entity.getType());
     }
 
     @Nullable
@@ -93,5 +110,34 @@ public class Converters {
                 .setType(accountOwner.getType())
                 .setCreatedDate(accountOwner.getCreatedDate())
                 .setEnable(accountOwner.isEnable());
+    }
+
+    @Nullable
+    public static TerminalEntity convert(Terminal terminal) {
+        if (terminal == null) {
+            return null;
+        }
+        return new TerminalEntity()
+                .setId(terminal.getId())
+                .setAccount(convert(terminal.getAccount()))
+                .setAddress(terminal.getAddress())
+                .setCreatedDate(terminal.getCreatedDate())
+                .setEnable(terminal.isEnable())
+                .setType(terminal.getType());
+    }
+
+    @Nullable
+    public static TransactionEntity convert(Transaction transaction) {
+        if (transaction == null) {
+            return null;
+        }
+        return new TransactionEntity()
+                .setId(transaction.getId())
+                .setAmount(transaction.getAmount())
+                .setCreatedDate(transaction.getCreatedDate())
+                .setDebitAccount(convert(transaction.getDebitAccount()))
+                .setCreditAccount(convert(transaction.getCreditAccount()))
+                .setState(transaction.getState())
+                .setType(transaction.getType());
     }
 }

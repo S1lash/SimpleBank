@@ -3,6 +3,8 @@ package ru.kuzmichev.SimpleBank.server.service.account;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.AccountOwner;
+import ru.kuzmichev.SimpleBank.server.service.terminal.Terminal;
+import ru.kuzmichev.SimpleBank.server.service.transaction.Transaction;
 
 import java.util.Date;
 import java.util.Set;
@@ -17,7 +19,7 @@ public class Account {
     private String number;
     private boolean enable;
     private AccountOwner owner;
-    private Set<Long> debitTransactions;
-    private Set<Long> creditTransactions;
-    private Set<Long> terminals;
+    private Set<Transaction> debitTransactions;
+    private Set<Transaction> creditTransactions;
+    private Set<Terminal> terminals;
 }

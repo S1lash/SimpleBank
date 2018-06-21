@@ -3,6 +3,7 @@ package ru.kuzmichev.SimpleBank.server.service.transaction.repository;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import ru.kuzmichev.SimpleBank.server.service.account.repository.AccountEntity;
 import ru.kuzmichev.SimpleBank.server.util.TransactionState;
 import ru.kuzmichev.SimpleBank.server.util.TransactionType;
@@ -15,6 +16,7 @@ import java.util.Date;
 @Table(name = "TRANSACTION")
 @EqualsAndHashCode(of = {"id", "state", "type"})
 @ToString
+@Accessors(chain = true)
 public class TransactionEntity {
 
     @Id

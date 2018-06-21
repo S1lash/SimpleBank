@@ -2,6 +2,7 @@ package ru.kuzmichev.SimpleBank.server.service.accountowner;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import ru.kuzmichev.SimpleBank.server.service.account.Account;
 import ru.kuzmichev.SimpleBank.server.util.OwnerType;
 
 import java.util.Date;
@@ -15,5 +16,5 @@ public class AccountOwner {
     private OwnerType type;
     private Date createdDate;
     private boolean enable;
-    private Set<Long> accounts;
+    private Set<Account> accounts;
 }
