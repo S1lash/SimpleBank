@@ -2,7 +2,7 @@ package ru.kuzmichev.SimpleBank.server.service.terminal;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import ru.kuzmichev.SimpleBank.server.service.account.repository.AccountEntity;
+import ru.kuzmichev.SimpleBank.server.service.account.Account;
 import ru.kuzmichev.SimpleBank.server.util.TerminalType;
 
 import java.util.Date;
@@ -15,5 +15,5 @@ public class Terminal {
     private TerminalType type;
     private Date createdDate;
     private boolean enable;
-    private AccountEntity account;
+    private Account account;
 }

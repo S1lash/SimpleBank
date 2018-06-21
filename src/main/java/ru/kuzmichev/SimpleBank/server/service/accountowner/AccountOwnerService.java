@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.repository.AccountOwnerEntity;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.repository.AccountOwnerRepository;
 
+import static ru.kuzmichev.SimpleBank.server.util.Converters.convert;
+
 @Service
 public class AccountOwnerService {
 
@@ -21,19 +23,5 @@ public class AccountOwnerService {
             return null;
         }
         return convert(accountOwnerEntity);
-    }
-
-    @Nullable
-    private AccountOwner convert(AccountOwnerEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        return new AccountOwner()
-                .setId(entity.getId())
-                .setFullName(entity.getFullName())
-                .setAccounts(entity.getAccounts())
-                .setCreatedDate(entity.getCreatedDate())
-                .setEnable(entity.isEnable())
-                .setType(entity.getType());
     }
 }

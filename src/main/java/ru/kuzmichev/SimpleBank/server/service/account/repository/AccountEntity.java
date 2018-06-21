@@ -3,6 +3,7 @@ package ru.kuzmichev.SimpleBank.server.service.account.repository;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.repository.AccountOwnerEntity;
 import ru.kuzmichev.SimpleBank.server.service.terminal.repository.TerminalEntity;
 import ru.kuzmichev.SimpleBank.server.service.transaction.repository.TransactionEntity;
@@ -15,7 +16,8 @@ import java.util.Set;
 @Entity
 @Table(name = "ACCOUNT")
 @EqualsAndHashCode(of = {"id", "number"})
-@ToString(exclude = {"debitAccounts", "creditAccounts", "terminals"})
+@ToString(exclude = {"debitTransactions", "creditTransactions", "terminals"})
+@Accessors(chain = true)
 public class AccountEntity {
 
     @Id
@@ -42,10 +44,10 @@ public class AccountEntity {
     private AccountOwnerEntity owner;
 
     @OneToMany(mappedBy = "debitAccount")
-    private Set<TransactionEntity> debitAccounts;
+    private Set<TransactionEntity> debitTransactions;
 
     @OneToMany(mappedBy = "creditAccount")
-    private Set<TransactionEntity> creditAccounts;
+    private Set<TransactionEntity> creditTransactions;
 
     @OneToMany(mappedBy = "account")
     private Set<TerminalEntity> terminals;

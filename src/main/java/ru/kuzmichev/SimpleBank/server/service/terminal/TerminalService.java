@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kuzmichev.SimpleBank.server.service.terminal.repository.TerminalEntity;
 import ru.kuzmichev.SimpleBank.server.service.terminal.repository.TerminalRepository;
 
+import static ru.kuzmichev.SimpleBank.server.util.Converters.convert;
+
 @Service
 public class TerminalService {
 
@@ -21,19 +23,5 @@ public class TerminalService {
             return null;
         }
         return convert(terminalEntity);
-    }
-
-    @Nullable
-    private Terminal convert(TerminalEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        return new Terminal()
-                .setId(entity.getId())
-                .setAddress(entity.getAddress())
-                .setAccount(entity.getAccount())
-                .setCreatedDate(entity.getCreatedDate())
-                .setEnable(entity.isEnable())
-                .setType(entity.getType());
     }
 }
