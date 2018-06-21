@@ -3,6 +3,7 @@ package ru.kuzmichev.SimpleBank.server.service.terminal.repository;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import ru.kuzmichev.SimpleBank.server.service.account.repository.AccountEntity;
 import ru.kuzmichev.SimpleBank.server.util.TerminalType;
 
@@ -14,6 +15,7 @@ import java.util.Date;
 @Table(name = "TERMINAL")
 @EqualsAndHashCode(of = {"id", "address"})
 @ToString
+@Accessors(chain = true)
 public class TerminalEntity {
 
     @Id
