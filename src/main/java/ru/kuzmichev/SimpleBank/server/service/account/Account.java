@@ -18,6 +18,7 @@ public class Account {
     private Date createdDate;
     private String number;
     private boolean enable;
+    private AccountOwner owner;
 
     public Account() {
         this.createdDate = new Date();

@@ -36,7 +36,7 @@ public class TerminalEntity {
     @Column(nullable = false)
     private boolean enable;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "ACCOUNT_ID", nullable = false)
     private AccountEntity account;
 }

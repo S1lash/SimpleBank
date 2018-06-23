@@ -10,6 +10,7 @@ import ru.kuzmichev.SimpleBank.server.service.account.Account;
 import ru.kuzmichev.SimpleBank.server.service.account.AccountService;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.AccountOwner;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.AccountOwnerService;
+import ru.kuzmichev.SimpleBank.server.service.accountowner.SimpleAccount;
 import ru.kuzmichev.SimpleBank.server.service.terminal.Terminal;
 import ru.kuzmichev.SimpleBank.server.service.terminal.TerminalService;
 import ru.kuzmichev.SimpleBank.server.util.AccountInfo;
@@ -20,6 +21,7 @@ import ru.kuzmichev.SimpleBank.server.util.request.*;
 import ru.kuzmichev.SimpleBank.server.util.response.TransactionOperationResponse;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionOperationService {
@@ -121,7 +123,8 @@ public class TransactionOperationService {
         }
 
         if (account == null) {
-            return client.getAccounts();
+            return accountService.getAvailableAccountsByNumbers(
+                    client.getAccounts().stream().map(SimpleAccount::getNumber).collect(Collectors.toList()));
         }
 
         return Collections.singleton(account);

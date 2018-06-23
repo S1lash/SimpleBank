@@ -34,11 +34,11 @@ public class TransactionEntity {
     @Column(nullable = false)
     private Date createdDate;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "DEBIT_ACCOUNT", nullable = false)
     private AccountEntity debitAccount;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "CREDIT_ACCOUNT", nullable = false)
     private AccountEntity creditAccount;
 

@@ -28,7 +28,7 @@ public class AccountEntity {
     @Column(nullable = false)
     private long balance;
 
-    @Column(nullable = true)
+    @Column
     private String pan;
 
     @Column(nullable = false)
@@ -40,16 +40,16 @@ public class AccountEntity {
     @Column(nullable = false)
     private boolean enable;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "OWNER_ID", nullable = false)
     private AccountOwnerEntity owner;
 
-    @OneToMany(mappedBy = "debitAccount")
+    @OneToMany(mappedBy = "debitAccount", cascade = CascadeType.ALL)
     private Set<TransactionEntity> debitTransactions;
 
-    @OneToMany(mappedBy = "creditAccount")
+    @OneToMany(mappedBy = "creditAccount", cascade = CascadeType.ALL)
     private Set<TransactionEntity> creditTransactions;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private Set<TerminalEntity> terminals;
 }

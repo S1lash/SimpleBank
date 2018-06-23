@@ -16,7 +16,7 @@ public class AccountOwner {
     private OwnerType type;
     private Date createdDate;
     private boolean enable;
-    private Set<Account> accounts;
+    private Set<SimpleAccount> accounts;
 
     public AccountOwner() {
         this.createdDate = new Date();

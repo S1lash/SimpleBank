@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.kuzmichev.SimpleBank.server.service.account.Account;
 import ru.kuzmichev.SimpleBank.server.service.account.repository.AccountEntity;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.AccountOwner;
+import ru.kuzmichev.SimpleBank.server.service.accountowner.SimpleAccount;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.repository.AccountOwnerEntity;
 import ru.kuzmichev.SimpleBank.server.service.terminal.Terminal;
 import ru.kuzmichev.SimpleBank.server.service.terminal.repository.TerminalEntity;
@@ -37,7 +38,10 @@ public class Converters {
                 .setId(entity.getId())
                 .setFullName(entity.getFullName())
                 .setAccounts(entity.getAccounts().stream()
-                    .map(a -> convert(a))
+                    .map(a -> new SimpleAccount()
+                        .setId(a.getId())
+                        .setNumber(a.getNumber())
+                        .setEnable(a.isEnable()))
                     .collect(Collectors.toSet()))
                 .setCreatedDate(entity.getCreatedDate())
                 .setEnable(entity.isEnable())
@@ -55,7 +59,8 @@ public class Converters {
                 .setBalance(entity.getBalance())
                 .setCreatedDate(entity.getCreatedDate())
                 .setEnable(entity.isEnable())
-                .setPan(entity.getPan());
+                .setPan(entity.getPan())
+                .setOwner(convert(entity.getOwner()));
 
     }
 
@@ -85,7 +90,8 @@ public class Converters {
                 .setCreatedDate(account.getCreatedDate())
                 .setEnable(account.isEnable())
                 .setNumber(account.getNumber())
-                .setPan(account.getPan());
+                .setPan(account.getPan())
+                .setOwner(convert(account.getOwner()));
     }
 
     @Nullable

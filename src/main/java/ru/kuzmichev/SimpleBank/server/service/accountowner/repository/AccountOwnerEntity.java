@@ -38,6 +38,6 @@ public class AccountOwnerEntity {
     @Column(nullable = false)
     private boolean enable;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private Set<AccountEntity> accounts;
 }
