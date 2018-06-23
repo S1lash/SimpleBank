@@ -11,11 +11,16 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class Transaction {
-    private long id;
+    private Long id;
     private TransactionState state;
     private long amount;
     private Date createdDate;
     private Account debitAccount;
     private Account creditAccount;
     private TransactionType type;
+
+    public Transaction() {
+        this.createdDate = new Date();
+        this.state = TransactionState.CREATED;
+    }
 }

@@ -1,10 +1,17 @@
 package ru.kuzmichev.SimpleBank.server.util.request;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
+import ru.kuzmichev.SimpleBank.server.util.AccountInfo;
 import ru.kuzmichev.SimpleBank.server.util.TransactionType;
 
+@Data
 @ToString
-public abstract class TransactionRequest {
+@Accessors(chain = true)
+@EqualsAndHashCode
+public class TransactionRequest {
     private Long amount;
     private TransactionType transactionType;
     private AccountInfo creditPart;

@@ -12,14 +12,24 @@ import java.util.Set;
 @Data
 @Accessors(chain = true)
 public class Account {
-    private long id;
+    private Long id;
     private long balance;
     private String pan;
     private Date createdDate;
     private String number;
     private boolean enable;
-    private AccountOwner owner;
-    private Set<Transaction> debitTransactions;
-    private Set<Transaction> creditTransactions;
-    private Set<Terminal> terminals;
+
+    public Account() {
+        this.createdDate = new Date();
+        this.enable = true;
+        this.balance = 0L;
+    }
+
+    public void increaseBalance(long amount) {
+        this.balance += amount;
+    }
+
+    public void decreaseBalance(long amount) {
+        this.balance -= amount;
+    }
 }

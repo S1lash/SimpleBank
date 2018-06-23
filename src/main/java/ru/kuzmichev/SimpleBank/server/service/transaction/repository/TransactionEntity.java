@@ -20,8 +20,9 @@ import java.util.Date;
 public class TransactionEntity {
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transactionSequence")
+    @SequenceGenerator(name = "transactionSequence", sequenceName = "SEQ_TRANSACTION", allocationSize = 1)
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

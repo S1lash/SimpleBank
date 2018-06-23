@@ -55,17 +55,7 @@ public class Converters {
                 .setBalance(entity.getBalance())
                 .setCreatedDate(entity.getCreatedDate())
                 .setEnable(entity.isEnable())
-                .setOwner(convert(entity.getOwner()))
-                .setPan(entity.getPan())
-                .setTerminals(entity.getTerminals().stream()
-                    .map(t -> convert(t))
-                    .collect(Collectors.toSet()))
-                .setDebitTransactions(entity.getDebitTransactions().stream()
-                    .map(t -> convert(t))
-                    .collect(Collectors.toSet()))
-                .setCreditTransactions(entity.getCreditTransactions().stream()
-                    .map(t -> convert(t))
-                    .collect(Collectors.toSet()));
+                .setPan(entity.getPan());
 
     }
 
@@ -95,7 +85,6 @@ public class Converters {
                 .setCreatedDate(account.getCreatedDate())
                 .setEnable(account.isEnable())
                 .setNumber(account.getNumber())
-                .setOwner(convert(account.getOwner()))
                 .setPan(account.getPan());
     }
 

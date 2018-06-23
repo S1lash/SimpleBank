@@ -17,7 +17,7 @@ public class AccountOwnerService {
 
     @Nullable
     @Transactional(readOnly = true)
-    public AccountOwner getAvailableTerminalById(long id) {
+    public AccountOwner getAvailableAccountOwnerById(long id) {
         AccountOwnerEntity accountOwnerEntity = accountOwnerRepository.getOne(id);
         if (accountOwnerEntity == null || !accountOwnerEntity.isEnable()) {
             return null;

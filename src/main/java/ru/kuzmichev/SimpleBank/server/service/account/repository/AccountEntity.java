@@ -21,8 +21,9 @@ import java.util.Set;
 public class AccountEntity {
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accountSequence")
+    @SequenceGenerator(name = "accountSequence", sequenceName = "SEQ_ACCOUNT", allocationSize = 1)
+    private Long id;
 
     @Column(nullable = false)
     private long balance;
@@ -51,10 +52,4 @@ public class AccountEntity {
 
     @OneToMany(mappedBy = "account")
     private Set<TerminalEntity> terminals;
-
-    public AccountEntity() {
-        this.createdDate = new Date();
-        this.enable = true;
-        this.balance = 0L;
-    }
 }

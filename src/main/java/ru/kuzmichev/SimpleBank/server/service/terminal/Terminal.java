@@ -10,10 +10,15 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class Terminal {
-    private long id;
+    private Long id;
     private String address;
     private TerminalType type;
     private Date createdDate;
     private boolean enable;
     private Account account;
+
+    public Terminal() {
+        this.createdDate = new Date();
+        this.enable = true;
+    }
 }

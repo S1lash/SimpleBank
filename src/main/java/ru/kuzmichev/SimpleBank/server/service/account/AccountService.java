@@ -19,7 +19,7 @@ public class AccountService {
 
     @Nullable
     @Transactional(readOnly = true)
-    public Account getAvailableTerminalByNumber(String number) {
+    public Account getAvailableAccountByNumber(String number) {
         AccountEntity accountEntity = accountRepository.findAccountEntityByNumber(number);
         if (accountEntity == null || !accountEntity.isEnable()) {
             return null;
@@ -30,8 +30,8 @@ public class AccountService {
     @Transactional(propagation = Propagation.MANDATORY)
     public void saveAccount(Account account) {
         Assert.notNull(account, "account is null");
-        Assert.notNull(account.getOwner(), "account.owner is null");
 
-        accountRepository.save(convert(account));
+        long accountId = accountRepository.save(convert(account)).getId();
+        account.setId(accountId);
     }
 }

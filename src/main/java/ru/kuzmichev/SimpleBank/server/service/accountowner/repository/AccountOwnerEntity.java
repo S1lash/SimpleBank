@@ -21,8 +21,9 @@ import java.util.Set;
 public class AccountOwnerEntity {
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accountOwnerSequence")
+    @SequenceGenerator(name = "accountOwnerSequence", sequenceName = "SEQ_ACCOUNT_OWNER", allocationSize = 1)
+    private Long id;
 
     @Column(nullable = false)
     private String fullName;
@@ -39,9 +40,4 @@ public class AccountOwnerEntity {
 
     @OneToMany(mappedBy = "owner")
     private Set<AccountEntity> accounts;
-
-    public AccountOwnerEntity() {
-        this.createdDate = new Date();
-        this.enable = true;
-    }
 }

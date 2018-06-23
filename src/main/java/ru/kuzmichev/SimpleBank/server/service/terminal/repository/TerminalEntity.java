@@ -19,10 +19,11 @@ import java.util.Date;
 public class TerminalEntity {
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "terminalSequence")
+    @SequenceGenerator(name = "terminalSequence", sequenceName = "SEQ_TERMINAL", allocationSize = 1)
+    private Long id;
 
-    @Column(nullable = true)
+    @Column
     private String address;
 
     @Enumerated(EnumType.STRING)
@@ -38,9 +39,4 @@ public class TerminalEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "ACCOUNT_ID", nullable = false)
     private AccountEntity account;
-
-    public TerminalEntity() {
-        this.createdDate = new Date();
-        this.enable = true;
-    }
 }

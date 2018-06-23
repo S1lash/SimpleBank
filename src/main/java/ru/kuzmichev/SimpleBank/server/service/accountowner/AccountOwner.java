@@ -11,10 +11,15 @@ import java.util.Set;
 @Data
 @Accessors(chain = true)
 public class AccountOwner {
-    private long id;
+    private Long id;
     private String fullName;
     private OwnerType type;
     private Date createdDate;
     private boolean enable;
     private Set<Account> accounts;
+
+    public AccountOwner() {
+        this.createdDate = new Date();
+        this.enable = true;
+    }
 }
