@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kuzmichev.SimpleBank.server.service.account.Account;
+import ru.kuzmichev.SimpleBank.server.util.CalculationResult;
 import ru.kuzmichev.SimpleBank.server.util.TransactionState;
 import ru.kuzmichev.SimpleBank.server.util.request.TransactionRequest;
 import ru.kuzmichev.SimpleBank.server.util.response.TransactionOperationResponse;
@@ -25,7 +26,7 @@ public class TransactionOperationFacade {
         // save trx (state = created)
         transactionService.saveTransaction(transaction);
 
-        boolean result = transactionService.calculateOperation(transaction);
+        CalculationResult result = transactionService.calculateOperation(transaction);
         TransactionOperationResponse response = buildResponse(transaction, result);
 
         // update trx
@@ -34,16 +35,16 @@ public class TransactionOperationFacade {
         return response;
     }
 
-    private TransactionOperationResponse buildResponse(Transaction transaction, boolean result) {
+    private TransactionOperationResponse buildResponse(Transaction transaction, CalculationResult result) {
         TransactionOperationResponse response = new TransactionOperationResponse();
-        if (!result) {
+        if (result.isError()) {
             transaction.setState(TransactionState.DECLINE);
-            response.setErrorMessage("Not enough money");
+            response.setErrorMessage(result.getErrorMessage());
         } else {
             transaction.setState(TransactionState.APPROVED);
         }
         return response
-                .setError(!result)
+                .setError(result.isError())
                 .setTransactionId(transaction.getId())
                 .setTransactionState(transaction.getState())
                 .setTransactionType(transaction.getType());

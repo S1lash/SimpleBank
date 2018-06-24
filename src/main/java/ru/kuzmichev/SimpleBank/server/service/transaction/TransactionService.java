@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import ru.kuzmichev.SimpleBank.server.service.transaction.repository.TransactionRepository;
+import ru.kuzmichev.SimpleBank.server.util.CalculationResult;
+import ru.kuzmichev.SimpleBank.server.util.exception.BalanceOperationException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,21 +32,19 @@ public class TransactionService {
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public boolean calculateOperation(Transaction transaction) {
-        if (transaction.getCreditAccount().getBalance() < transaction.getAmount()) {
-            return false;
-        }
+    public CalculationResult calculateOperation(Transaction transaction) {
         long creditStartBalance = transaction.getCreditAccount().getBalance();
         long debitStartBalance = transaction.getDebitAccount().getBalance();
         try {
+            validateCalculateOperation(creditStartBalance, debitStartBalance, transaction.getAmount());
             transaction.getDebitAccount().increaseBalance(transaction.getAmount());
             transaction.getCreditAccount().decreaseBalance(transaction.getAmount());
         } catch (Exception e) {
             transaction.getCreditAccount().setBalance(creditStartBalance);
             transaction.getDebitAccount().setBalance(debitStartBalance);
-            return false;
+            return new CalculationResult().setError(true).setErrorMessage(e.getMessage());
         }
-        return true;
+        return new CalculationResult().setError(false);
     }
 
     @Transactional(readOnly = true)
@@ -57,5 +57,14 @@ public class TransactionService {
         return transactionRepository.findAllById(ids).stream()
                 .map(t -> convert(t))
                 .collect(Collectors.toList());
+    }
+
+    private void validateCalculateOperation(long creditBalance, long debitBalance, long amount) throws BalanceOperationException {
+        if (creditBalance < amount) {
+            throw new BalanceOperationException("Not enough money");
+        }
+        if ((Long.MAX_VALUE - debitBalance) < amount) {
+            throw new BalanceOperationException("Amount is too large");
+        }
     }
 }
