@@ -1,5 +1,6 @@
 package ru.kuzmichev.SimpleBank.server.service.terminal;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 import static ru.kuzmichev.SimpleBank.server.util.Converters.convert;
 
+@Slf4j
 @Service
 public class TerminalService {
 
@@ -22,6 +24,7 @@ public class TerminalService {
     @Nullable
     @Transactional(readOnly = true)
     public Terminal getAvailableTerminalById(long id) {
+        log.debug("Get available terminal with id [{}]", id);
         TerminalEntity terminalEntity = terminalRepository.getOne(id);
         if (terminalEntity == null || !terminalEntity.isEnable()) {
             return null;
@@ -31,6 +34,7 @@ public class TerminalService {
 
     @Transactional(readOnly = true)
     public List<Terminal> getAllByIds(List<Long> ids) {
+        log.debug("Get all terminals with ids [{}]", ids);
         if (CollectionUtils.isEmpty(ids)) {
             return terminalRepository.findAll().stream()
                     .map(t -> convert(t))

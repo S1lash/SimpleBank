@@ -1,5 +1,6 @@
 package ru.kuzmichev.SimpleBank.server.service.transaction;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -10,6 +11,7 @@ import ru.kuzmichev.SimpleBank.server.util.TransactionState;
 import ru.kuzmichev.SimpleBank.server.util.request.TransactionRequest;
 import ru.kuzmichev.SimpleBank.server.util.response.TransactionOperationResponse;
 
+@Slf4j
 @Service
 public class TransactionOperationFacade {
 
@@ -18,6 +20,7 @@ public class TransactionOperationFacade {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public TransactionOperationResponse doTransaction(TransactionRequest request, Account creditAccount, Account debitAccount) {
+        log.debug("Start doTransaction for request [{}]", request);
         Transaction transaction = new Transaction()
                 .setAmount(request.getAmount())
                 .setType(request.getTransactionType())
@@ -27,7 +30,9 @@ public class TransactionOperationFacade {
         transactionService.saveTransaction(transaction);
 
         CalculationResult result = transactionService.calculateOperation(transaction);
+        log.debug("Calculation result [{}] for transaction with id [{}]", request, transaction.getId());
         TransactionOperationResponse response = buildResponse(transaction, result);
+        log.debug(response.toString());
 
         // update trx
         transactionService.saveTransaction(transaction);

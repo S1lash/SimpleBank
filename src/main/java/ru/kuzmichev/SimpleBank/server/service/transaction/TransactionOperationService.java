@@ -1,5 +1,6 @@
 package ru.kuzmichev.SimpleBank.server.service.transaction;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import ru.kuzmichev.SimpleBank.server.util.response.TransactionOperationResponse
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class TransactionOperationService {
 
@@ -37,12 +39,14 @@ public class TransactionOperationService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public TransactionOperationResponse transfer(TransactionRequest request) throws RequestValidationException, ClientAccountException {
+        log.debug("Start TRANSFER operation [{}]", request);
         validate(request);
 
         Account creditAccount = getActualAccount(getAvailableAccount(
                 request.getCreditPart().getClientId(),
                 request.getCreditPart().getAccountNumber()));
         if (creditAccount == null) {
+            log.debug("Actual available credit account not found [{}]", request.getCreditPart());
             return buildErrorResponse(String.format("CreditAccount [accountInfo=%s] not found", request.getCreditPart()),
                     request.getTransactionType());
         }
@@ -51,6 +55,7 @@ public class TransactionOperationService {
                 request.getDebitPart().getClientId(),
                 request.getDebitPart().getAccountNumber()));
         if (debitAccount == null) {
+            log.debug("Actual available debit account not found [{}]", request.getDebitPart());
             return buildErrorResponse(String.format("DebitAccount [accountInfo=%s] not found", request.getDebitPart()),
                     request.getTransactionType());
         }
@@ -60,10 +65,12 @@ public class TransactionOperationService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public TransactionOperationResponse deposit(TransactionRequest request) throws RequestValidationException, ClientAccountException {
+        log.debug("Start DEPOSIT operation [{}]", request);
         validate(request);
 
         Account creditAccount = getAvailableTerminalAccount(request.getCreditPart().getTerminalId());
         if (creditAccount == null) {
+            log.debug("Actual available credit account not found [{}]", request.getCreditPart());
             return buildErrorResponse(String.format("CreditAccount [accountInfo=%s] not found", request.getCreditPart()),
                     request.getTransactionType());
         }
@@ -72,6 +79,7 @@ public class TransactionOperationService {
                 request.getDebitPart().getClientId(),
                 request.getDebitPart().getAccountNumber()));
         if (debitAccount == null) {
+            log.debug("Actual available debit account not found [{}]", request.getDebitPart());
             return buildErrorResponse(String.format("DebitAccount [accountInfo=%s] not found", request.getDebitPart()),
                     request.getTransactionType());
         }
@@ -81,18 +89,21 @@ public class TransactionOperationService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public TransactionOperationResponse withdrawal(TransactionRequest request) throws RequestValidationException, ClientAccountException {
+        log.debug("Start WITHDRAWAL operation [{}]", request);
         validate(request);
 
         Account creditAccount = getActualAccount(getAvailableAccount(
                 request.getCreditPart().getClientId(),
                 request.getCreditPart().getAccountNumber()));
         if (creditAccount == null) {
+            log.debug("Actual available credit account not found [{}]", request.getCreditPart());
             return buildErrorResponse(String.format("CreditAccount [accountInfo=%s] not found", request.getCreditPart()),
                     request.getTransactionType());
         }
 
         Account debitAccount = getAvailableTerminalAccount(request.getDebitPart().getTerminalId());
         if (debitAccount == null) {
+            log.debug("Actual available debit account not found [{}]", request.getDebitPart());
             return buildErrorResponse(String.format("DebitAccount [accountInfo=%s] not found", request.getDebitPart()),
                     request.getTransactionType());
         }
@@ -108,6 +119,7 @@ public class TransactionOperationService {
 
         if (client != null && StringUtils.isNotBlank(accountNumber)
                 && !client.getAccounts().contains(accountNumber)) {
+            log.debug("Client with id [{}] doesn't have such account [{}]", clientId, accountNumber);
             throw new ClientAccountException(String.format(
                     "Client [id=%s] doesn't have such account [accountNumber=%s]",
                     clientId, accountNumber));
@@ -119,6 +131,7 @@ public class TransactionOperationService {
         }
 
         if (client == null && account == null) {
+            log.debug("Client [{}] and account [{}] not found", clientId, accountNumber);
             return Collections.EMPTY_SET;
         }
 
@@ -164,6 +177,7 @@ public class TransactionOperationService {
     }
 
     private void validateDepositOperation(TransactionRequest request) throws RequestValidationException {
+        log.debug("Start validate DEPOSIT operation request");
         AccountInfo debitPart = request.getDebitPart();
         AccountInfo creditPart = request.getCreditPart();
 
@@ -179,6 +193,7 @@ public class TransactionOperationService {
     }
 
     private void validateWithdrawalOperation(TransactionRequest request) throws RequestValidationException {
+        log.debug("Start validate WITHDRAWAL operation request");
         AccountInfo debitPart = request.getDebitPart();
         AccountInfo creditPart = request.getCreditPart();
 
@@ -194,6 +209,7 @@ public class TransactionOperationService {
     }
 
     private void validateTransferOperation(TransactionRequest request) throws RequestValidationException {
+        log.debug("Start validate TRANSFER operation request");
         AccountInfo debitPart = request.getDebitPart();
         AccountInfo creditPart = request.getCreditPart();
 

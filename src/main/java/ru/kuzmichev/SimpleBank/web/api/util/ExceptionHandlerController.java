@@ -40,9 +40,11 @@ public class ExceptionHandlerController {
     }
 
     private ErrorResponse buildErrorResponse(String errorMessage, String cause) {
-        return new ErrorResponse()
+        ErrorResponse response = new ErrorResponse()
                 .setErrorMessage(errorMessage)
                 .setCause(cause)
                 .setError(true);
+        log.debug("Error response: [{}]", response);
+        return response;
     }
 }

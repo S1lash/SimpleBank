@@ -1,5 +1,6 @@
 package ru.kuzmichev.SimpleBank.server.service.accountowner;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 import static ru.kuzmichev.SimpleBank.server.util.Converters.convert;
 
+@Slf4j
 @Service
 public class AccountOwnerService {
 
@@ -22,6 +24,7 @@ public class AccountOwnerService {
     @Nullable
     @Transactional(readOnly = true)
     public AccountOwner getAvailableAccountOwnerById(long id) {
+        log.debug("Get available accountOwner with id [{}]", id);
         AccountOwnerEntity accountOwnerEntity = accountOwnerRepository.getOne(id);
         if (accountOwnerEntity == null || !accountOwnerEntity.isEnable()) {
             return null;
@@ -31,6 +34,7 @@ public class AccountOwnerService {
 
     @Transactional(readOnly = true)
     public List<AccountOwner> getAllByIds(List<Long> ids) {
+        log.debug("Get all accountOwners with ids [{}]", ids);
         if (CollectionUtils.isEmpty(ids)) {
             return accountOwnerRepository.findAll().stream()
                     .map(ao -> convert(ao))

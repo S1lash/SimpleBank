@@ -1,5 +1,6 @@
 package ru.kuzmichev.SimpleBank.web.api.operation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import ru.kuzmichev.SimpleBank.web.api.util.dto.response.OperationResponse;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "operation")
 public class OperationController {
@@ -27,6 +29,7 @@ public class OperationController {
 
     @RequestMapping(value = "transfer", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public OperationResponse transfer(@Valid @RequestBody OperationRequest request) throws RequestValidationException, ClientAccountException {
+        log.info("Incoming request: [{}]", request);
         TransactionRequest transactionRequest = new TransactionRequest(TransactionType.TRANSFER)
                 .setAmount(request.getAmount())
                 .setDebitPart(convert(request.getDebitPart()))
@@ -39,18 +42,20 @@ public class OperationController {
 
     @RequestMapping(value = "deposit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public OperationResponse deposit(@Valid @RequestBody OperationRequest request) throws RequestValidationException, ClientAccountException {
+        log.debug("Incoming request: [{}]", request);
         TransactionRequest transactionRequest = new TransactionRequest(TransactionType.DEPOSIT)
                 .setAmount(request.getAmount())
                 .setDebitPart(convert(request.getDebitPart()))
                 .setCreditPart(convert(request.getCreditPart()));
-        throw new RuntimeException("WTF");
-        //TransactionOperationResponse response = transactionOperationService.deposit(transactionRequest);
 
-        //return buildResponse(null);
+        TransactionOperationResponse response = transactionOperationService.deposit(transactionRequest);
+
+        return buildResponse(response);
     }
 
     @RequestMapping(value = "withdrawal", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public OperationResponse withdrawal(@Valid @RequestBody OperationRequest request) throws RequestValidationException, ClientAccountException {
+        log.debug("Incoming request: [{}]", request);
         TransactionRequest transactionRequest = new TransactionRequest(TransactionType.WITHDRAWAL)
                 .setAmount(request.getAmount())
                 .setDebitPart(convert(request.getDebitPart()))
@@ -69,11 +74,13 @@ public class OperationController {
     }
 
     private OperationResponse buildResponse(TransactionOperationResponse response) {
-        return new OperationResponse()
+        OperationResponse operationResponse = new OperationResponse()
                 .setError(response.isError())
                 .setDescription(response.getErrorMessage())
                 .setTransactionId(response.getTransactionId())
                 .setTransactionType(response.getTransactionType())
                 .setState(response.getTransactionState());
+        log.debug("Response: [{}]", operationResponse);
+        return operationResponse;
     }
 }

@@ -1,5 +1,6 @@
 package ru.kuzmichev.SimpleBank.web.api.info;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "info")
 public class InfoController {
@@ -36,6 +38,7 @@ public class InfoController {
 
     @RequestMapping(value = "accounts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Response accounts(@RequestBody(required = false) EntityRequest request) {
+        log.debug("Incoming request: [{}]", request);
         List<Long> ids = request != null ? request.getIds() : Collections.EMPTY_LIST;
         return new AccountResponse()
                 .setAccounts(accountService.getAllByIds(ids).stream()
@@ -52,6 +55,7 @@ public class InfoController {
 
     @RequestMapping(value = "accountOwners", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Response accountOwners(@RequestBody(required = false) EntityRequest request) {
+        log.debug("Incoming request: [{}]", request);
         List<Long> ids = request != null ? request.getIds() : Collections.EMPTY_LIST;
         return new AccountOwnerResponse()
                 .setAccountOwners(accountOwnerService.getAllByIds(ids).stream()
@@ -66,6 +70,7 @@ public class InfoController {
 
     @RequestMapping(value = "terminals", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Response terminals(@RequestBody(required = false) EntityRequest request) {
+        log.debug("Incoming request: [{}]", request);
         List<Long> ids = request != null ? request.getIds() : Collections.EMPTY_LIST;
         return new TerminalResponse()
                 .setTerminals(terminalService.getAllByIds(ids).stream()
@@ -81,6 +86,7 @@ public class InfoController {
 
     @RequestMapping(value = "transactions", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Response transactions(@RequestBody(required = false) EntityRequest request) {
+        log.debug("Incoming request: [{}]", request);
         List<Long> ids = request != null ? request.getIds() : Collections.EMPTY_LIST;
         return new TransactionResponse()
                 .setTransactions(transactionService.getAllByIds(ids).stream()

@@ -1,5 +1,6 @@
 package ru.kuzmichev.SimpleBank.server.service.transaction;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static ru.kuzmichev.SimpleBank.server.util.Converters.convert;
 
+@Slf4j
 @Service
 public class TransactionService {
 
@@ -23,6 +25,7 @@ public class TransactionService {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void saveTransaction(Transaction transaction) {
+        log.debug("Save transaction [{}]", transaction);
         Assert.notNull(transaction, "transaction is null");
         Assert.notNull(transaction.getDebitAccount(), "transaction.debitAccount is null");
         Assert.notNull(transaction.getCreditAccount(), "transaction.creditAccount is null");
@@ -33,6 +36,7 @@ public class TransactionService {
 
     @Transactional(propagation = Propagation.MANDATORY)
     public CalculationResult calculateOperation(Transaction transaction) {
+        log.debug("Start calculate balnce operation for transaction [{}]", transaction);
         long creditStartBalance = transaction.getCreditAccount().getBalance();
         long debitStartBalance = transaction.getDebitAccount().getBalance();
         try {
@@ -49,6 +53,7 @@ public class TransactionService {
 
     @Transactional(readOnly = true)
     public List<Transaction> getAllByIds(List<Long> ids) {
+        log.debug("Get all transactions with ids [{}]", ids);
         if (CollectionUtils.isEmpty(ids)) {
             return transactionRepository.findAll().stream()
                     .map(t -> convert(t))
