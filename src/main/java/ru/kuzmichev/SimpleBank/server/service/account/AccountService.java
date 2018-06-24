@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import ru.kuzmichev.SimpleBank.server.service.account.repository.AccountEntity;
 import ru.kuzmichev.SimpleBank.server.service.account.repository.AccountRepository;
 
@@ -49,5 +50,17 @@ public class AccountService {
 
         long accountId = accountRepository.save(convert(account)).getId();
         account.setId(accountId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Account> getAllByIds(List<Long> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return accountRepository.findAll().stream()
+                    .map(a -> convert(a))
+                    .collect(Collectors.toList());
+        }
+        return accountRepository.findAllById(ids).stream()
+                .map(a -> convert(a))
+                .collect(Collectors.toList());
     }
 }

@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import ru.kuzmichev.SimpleBank.server.service.transaction.repository.TransactionEntity;
+import org.springframework.util.CollectionUtils;
 import ru.kuzmichev.SimpleBank.server.service.transaction.repository.TransactionRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.kuzmichev.SimpleBank.server.util.Converters.convert;
 
@@ -42,5 +45,17 @@ public class TransactionService {
             return false;
         }
         return true;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Transaction> getAllByIds(List<Long> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return transactionRepository.findAll().stream()
+                    .map(t -> convert(t))
+                    .collect(Collectors.toList());
+        }
+        return transactionRepository.findAllById(ids).stream()
+                .map(t -> convert(t))
+                .collect(Collectors.toList());
     }
 }
