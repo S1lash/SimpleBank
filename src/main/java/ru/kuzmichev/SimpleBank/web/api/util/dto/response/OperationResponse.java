@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OperationResponse extends SuccessfulResponse {
     private boolean error;
-    private long transactionId;
+    private Long transactionId;
     private TransactionType transactionType;
     private TransactionState state;
     private String description;

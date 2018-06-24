@@ -43,7 +43,7 @@ public class TransactionOperationService {
                 request.getCreditPart().getClientId(),
                 request.getCreditPart().getAccountNumber()));
         if (creditAccount == null) {
-            return buildErrorResponse(String.format("CreditAccount [accountInfo=] not found", request.getCreditPart()),
+            return buildErrorResponse(String.format("CreditAccount [accountInfo=%s] not found", request.getCreditPart()),
                     request.getTransactionType());
         }
 
@@ -51,7 +51,7 @@ public class TransactionOperationService {
                 request.getDebitPart().getClientId(),
                 request.getDebitPart().getAccountNumber()));
         if (debitAccount == null) {
-            return buildErrorResponse(String.format("DebitAccount [accountInfo=] not found", request.getDebitPart()),
+            return buildErrorResponse(String.format("DebitAccount [accountInfo=%s] not found", request.getDebitPart()),
                     request.getTransactionType());
         }
 
@@ -64,7 +64,7 @@ public class TransactionOperationService {
 
         Account creditAccount = getAvailableTerminalAccount(request.getCreditPart().getTerminalId());
         if (creditAccount == null) {
-            return buildErrorResponse(String.format("CreditAccount [accountInfo=] not found", request.getCreditPart()),
+            return buildErrorResponse(String.format("CreditAccount [accountInfo=%s] not found", request.getCreditPart()),
                     request.getTransactionType());
         }
 
@@ -72,7 +72,7 @@ public class TransactionOperationService {
                 request.getDebitPart().getClientId(),
                 request.getDebitPart().getAccountNumber()));
         if (debitAccount == null) {
-            return buildErrorResponse(String.format("DebitAccount [accountInfo=] not found", request.getDebitPart()),
+            return buildErrorResponse(String.format("DebitAccount [accountInfo=%s] not found", request.getDebitPart()),
                     request.getTransactionType());
         }
 
@@ -87,13 +87,13 @@ public class TransactionOperationService {
                 request.getCreditPart().getClientId(),
                 request.getCreditPart().getAccountNumber()));
         if (creditAccount == null) {
-            return buildErrorResponse(String.format("CreditAccount [accountInfo=] not found", request.getCreditPart()),
+            return buildErrorResponse(String.format("CreditAccount [accountInfo=%s] not found", request.getCreditPart()),
                     request.getTransactionType());
         }
 
         Account debitAccount = getAvailableTerminalAccount(request.getDebitPart().getTerminalId());
         if (debitAccount == null) {
-            return buildErrorResponse(String.format("DebitAccount [accountInfo=] not found", request.getDebitPart()),
+            return buildErrorResponse(String.format("DebitAccount [accountInfo=%s] not found", request.getDebitPart()),
                     request.getTransactionType());
         }
 
@@ -150,16 +150,6 @@ public class TransactionOperationService {
     }
 
     private void validate(TransactionRequest request) throws RequestValidationException {
-        if (request.getCreditPart() == null) {
-            throw new RequestValidationException("CreditPart is null");
-        }
-        if (request.getDebitPart() == null) {
-            throw new RequestValidationException("DebitPart is null");
-        }
-        if (request.getAmount() < 0) {
-            throw new RequestValidationException("Invalid [amount]");
-        }
-
         switch (request.getTransactionType()) {
             case DEPOSIT:
                 validateDepositOperation(request);
