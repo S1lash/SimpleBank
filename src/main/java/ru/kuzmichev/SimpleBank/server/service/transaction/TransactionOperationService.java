@@ -170,11 +170,11 @@ public class TransactionOperationService {
         if (StringUtils.isNotBlank(creditPart.getAccountNumber()) ||
                 creditPart.getClientId() != null ||
                 creditPart.getTerminalId() == null) {
-            throw new RequestValidationException("CreditPart: must contain only [terminalId]");
+            throw new RequestValidationException("[CreditPart] must contain only [terminalId]");
         }
         if (debitPart.getTerminalId() != null ||
                 (StringUtils.isBlank(debitPart.getAccountNumber()) && debitPart.getClientId() == null)) {
-            throw new RequestValidationException("DebitPart: must contain [clientId] or [accountNumber]");
+            throw new RequestValidationException("[DebitPart] must contain [clientId] or [accountNumber]");
         }
     }
 
@@ -184,12 +184,12 @@ public class TransactionOperationService {
 
         if (creditPart.getTerminalId() != null ||
                 (StringUtils.isBlank(creditPart.getAccountNumber()) && creditPart.getClientId() == null)) {
-            throw new RequestValidationException("CreditPart: must contain [clientId] or [accountNumber]");
+            throw new RequestValidationException("[CreditPart] must contain [clientId] or [accountNumber]");
         }
         if (StringUtils.isNotBlank(debitPart.getAccountNumber()) ||
                 debitPart.getClientId() != null ||
                 debitPart.getTerminalId() == null) {
-            throw new RequestValidationException("DebitPart: must contain only [terminalId]");
+            throw new RequestValidationException("[DebitPart] must contain only [terminalId]");
         }
     }
 
@@ -199,11 +199,11 @@ public class TransactionOperationService {
 
         if (creditPart.getTerminalId() != null ||
                 (StringUtils.isBlank(creditPart.getAccountNumber()) && creditPart.getClientId() == null)) {
-            throw new RequestValidationException("CreditPart: must contain [clientId] or [accountNumber]");
+            throw new RequestValidationException("[CreditPart] must contain [clientId] or [accountNumber]");
         }
         if (debitPart.getTerminalId() != null ||
                 (StringUtils.isBlank(debitPart.getAccountNumber()) && debitPart.getClientId() == null)) {
-            throw new RequestValidationException("DebitPart: must contain [clientId] or [accountNumber]");
+            throw new RequestValidationException("[DebitPart] must contain [clientId] or [accountNumber]");
         }
     }
 

@@ -43,10 +43,10 @@ public class OperationController {
                 .setAmount(request.getAmount())
                 .setDebitPart(convert(request.getDebitPart()))
                 .setCreditPart(convert(request.getCreditPart()));
+        throw new RuntimeException("WTF");
+        //TransactionOperationResponse response = transactionOperationService.deposit(transactionRequest);
 
-        TransactionOperationResponse response = transactionOperationService.deposit(transactionRequest);
-
-        return buildResponse(response);
+        //return buildResponse(null);
     }
 
     @RequestMapping(value = "withdrawal", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
