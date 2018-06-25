@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import ru.kuzmichev.SimpleBank.server.service.accountowner.repository.AccountOwnerEntity;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.repository.AccountOwnerRepository;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,17 +25,15 @@ public class AccountOwnerService {
     @Transactional(readOnly = true)
     public AccountOwner getAvailableAccountOwnerById(long id) {
         log.debug("Get available accountOwner with id [{}]", id);
-        AccountOwnerEntity accountOwnerEntity;
-        try {
-            accountOwnerEntity = accountOwnerRepository.getOne(id);
-        } catch (EntityNotFoundException e) {
-            log.debug("Account owner not found [{}]", id);
+        List<AccountOwner> owners = getAllByIds(Collections.singletonList(id));
+        if (owners.isEmpty()) {
             return null;
         }
-        if (!accountOwnerEntity.isEnable()) {
+        AccountOwner owner = owners.get(0);
+        if (!owner.isEnable()) {
             return null;
         }
-        return convert(accountOwnerEntity);
+        return owner;
     }
 
     @Transactional(readOnly = true)
