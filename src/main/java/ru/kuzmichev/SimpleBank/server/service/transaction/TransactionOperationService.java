@@ -122,21 +122,31 @@ public class TransactionOperationService {
             client = accountOwnerService.getAvailableAccountOwnerById(clientId);
         }
 
-        if (client != null && StringUtils.isNotBlank(accountNumber)
-                && !client.getAccounts().contains(accountNumber)) {
+        Account account = null;
+        if (StringUtils.isNotBlank(accountNumber)) {
+            account = accountService.getAvailableAccountByNumber(accountNumber);
+            if (account == null && client != null) {
+                log.debug("Client with id [{}] doesn't have such account [{}]", clientId, accountNumber);
+                throw new ClientAccountException(String.format(
+                        "Client [id=%s] doesn't have such account [accountNumber=%s]",
+                        clientId, accountNumber));
+            }
+        }
+
+        if (account != null && client != null &&
+                 !client.getAccounts().contains(new SimpleAccount()
+                         .setId(account.getId())
+                         .setNumber(account.getNumber())
+                         .setEnable(account.isEnable()))) {
             log.debug("Client with id [{}] doesn't have such account [{}]", clientId, accountNumber);
             throw new ClientAccountException(String.format(
                     "Client [id=%s] doesn't have such account [accountNumber=%s]",
                     clientId, accountNumber));
         }
 
-        Account account = null;
-        if (StringUtils.isNotBlank(accountNumber)) {
-            account = accountService.getAvailableAccountByNumber(accountNumber);
-        }
 
         if (client == null && account == null) {
-            log.debug("Client [{}] and account [{}] not found", clientId, accountNumber);
+            log.debug("Client [{}] or account [{}] not found", clientId, accountNumber);
             return Collections.EMPTY_SET;
         }
 

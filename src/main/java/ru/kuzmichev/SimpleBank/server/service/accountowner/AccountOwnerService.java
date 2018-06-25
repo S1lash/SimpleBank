@@ -9,6 +9,7 @@ import org.springframework.util.CollectionUtils;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.repository.AccountOwnerEntity;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.repository.AccountOwnerRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,8 +26,14 @@ public class AccountOwnerService {
     @Transactional(readOnly = true)
     public AccountOwner getAvailableAccountOwnerById(long id) {
         log.debug("Get available accountOwner with id [{}]", id);
-        AccountOwnerEntity accountOwnerEntity = accountOwnerRepository.getOne(id);
-        if (accountOwnerEntity == null || !accountOwnerEntity.isEnable()) {
+        AccountOwnerEntity accountOwnerEntity;
+        try {
+            accountOwnerEntity = accountOwnerRepository.getOne(id);
+        } catch (EntityNotFoundException e) {
+            log.debug("Account owner not found [{}]", id);
+            return null;
+        }
+        if (!accountOwnerEntity.isEnable()) {
             return null;
         }
         return convert(accountOwnerEntity);

@@ -9,6 +9,7 @@ import org.springframework.util.CollectionUtils;
 import ru.kuzmichev.SimpleBank.server.service.terminal.repository.TerminalEntity;
 import ru.kuzmichev.SimpleBank.server.service.terminal.repository.TerminalRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,8 +26,14 @@ public class TerminalService {
     @Transactional(readOnly = true)
     public Terminal getAvailableTerminalById(long id) {
         log.debug("Get available terminal with id [{}]", id);
-        TerminalEntity terminalEntity = terminalRepository.getOne(id);
-        if (terminalEntity == null || !terminalEntity.isEnable()) {
+        TerminalEntity terminalEntity;
+        try {
+            terminalEntity = terminalRepository.getOne(id);
+        } catch (EntityNotFoundException e) {
+            log.debug("Terminal not found [{}]", id);
+            return null;
+        }
+        if (!terminalEntity.isEnable()) {
             return null;
         }
         return convert(terminalEntity);
