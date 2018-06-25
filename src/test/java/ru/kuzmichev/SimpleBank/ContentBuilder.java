@@ -69,6 +69,9 @@ public class ContentBuilder {
     }
 
     private void addObject(String key, Object value) {
+        if (value == null) {
+            return;
+        }
         if (value instanceof Number) {
             jsonObjectBuilder.add(key, (Number) value);
         } else if (value instanceof String) {
