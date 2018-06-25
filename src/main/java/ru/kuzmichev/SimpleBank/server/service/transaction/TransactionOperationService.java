@@ -59,6 +59,11 @@ public class TransactionOperationService {
             return buildErrorResponse(String.format("DebitAccount [accountInfo=%s] not found", request.getDebitPart()),
                     request.getTransactionType());
         }
+        if (debitAccount == creditAccount) {
+            log.debug("Debit and Credit accounts are equal");
+            return buildErrorResponse(String.format("Debit [%s] and Credit [%s] accounts are equal", debitAccount, creditAccount),
+                    request.getTransactionType());
+        }
 
         return transactionOperationFacade.doTransaction(request, creditAccount, debitAccount);
     }
