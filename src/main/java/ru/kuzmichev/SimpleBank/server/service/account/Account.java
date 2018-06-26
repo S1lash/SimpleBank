@@ -1,16 +1,15 @@
 package ru.kuzmichev.SimpleBank.server.service.account;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import ru.kuzmichev.SimpleBank.server.service.accountowner.AccountOwner;
-import ru.kuzmichev.SimpleBank.server.service.terminal.Terminal;
-import ru.kuzmichev.SimpleBank.server.service.transaction.Transaction;
 
 import java.util.Date;
-import java.util.Set;
 
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(of = {"id", "number"})
 public class Account {
     private Long id;
     private long balance;
