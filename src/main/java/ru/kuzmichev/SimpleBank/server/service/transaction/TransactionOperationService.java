@@ -61,7 +61,7 @@ public class TransactionOperationService {
         }
         if (debitAccount.equals(creditAccount)) {
             log.debug("Debit and Credit accounts are equal");
-            return buildErrorResponse(String.format("Debit [%s] and Credit [%s] accounts are equal", debitAccount, creditAccount),
+            return buildErrorResponse("Debit and Credit accounts are equal",
                     request.getTransactionType());
         }
 
